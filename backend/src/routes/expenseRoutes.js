@@ -1,17 +1,34 @@
 import express from "express";
 import authMiddleware from "../middleware/authMiddleware.js";
+import validateSplitFriends from "../middleware/validateSplitFriends.js";
 import {
   addExpense,
-  getGroupExpenses,
-  getUserExpenses,
-  getGroupBalances,
+  payExpense,
+  getExpenseSettlement,
 } from "../controllers/expenseController.js";
 
 const router = express.Router();
 
-router.post("/", authMiddleware, addExpense);
-router.get("/group/:groupId", authMiddleware, getGroupExpenses);
-router.get("/user/:userId", authMiddleware, getUserExpenses);
-router.get("/group/:groupId/balances", authMiddleware, getGroupBalances);
+/**
+ * @route   POST /api/expenses
+ * @desc    Create a new expense (personal / group / instant split)
+ * @access  Private (JWT required)
+ * @middleware validateSplitFriends ensures all split participants are friends
+ */
+router.post("/", authMiddleware, validateSplitFriends, addExpense);
+
+/**
+ * @route   PATCH /api/expenses/:expenseId/pay
+ * @desc    Mark current user’s share of the expense as paid
+ * @access  Private
+ */
+router.patch("/:expenseId/pay", authMiddleware, payExpense);
+
+/**
+ * @route   GET /api/expenses/:expenseId/settlement
+ * @desc    Get settlement details (who owes whom)
+ * @access  Private
+ */
+router.get("/:expenseId/settlement", authMiddleware, getExpenseSettlement);
 
 export default router;

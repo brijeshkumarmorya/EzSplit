@@ -7,13 +7,14 @@ import {
   addMember,
   removeMember,
 } from "../controllers/groupController.js";
+import { validateGroupMembers, validateNewMember } from "../middleware/validateFriendship.js";
 
 const router = express.Router();
 
-router.post("/", authMiddleware, createGroup);
+router.post("/", authMiddleware, validateGroupMembers, createGroup);
 router.get("/my", authMiddleware, getMyGroups);
 router.get("/:groupId", authMiddleware, getGroupById);
-router.post("/:groupId/add-member", authMiddleware, addMember);
-router.post("/:groupId/remove-member", authMiddleware, removeMember);
+router.patch("/:groupId/add-member", authMiddleware, validateNewMember, addMember);
+router.delete("/:groupId/remove-member", authMiddleware, removeMember);
 
 export default router;

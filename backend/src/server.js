@@ -8,6 +8,7 @@ import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import expenseRoutes from "./routes/expenseRoutes.js";
 import groupRoutes from "./routes/groupRoutes.js";
+import friendRoutes from "./routes/friendRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -43,6 +44,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/expenses", expenseRoutes);
 app.use("/api/groups", groupRoutes);
+app.use("/api/friends", friendRoutes);
 
 const PORT = process.env.PORT || 8000;
-server.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+server.listen(PORT,"0.0.0.0", () => console.log(`🚀 Server running on port ${PORT}`));
