@@ -1,0 +1,17 @@
+🔹 6. Frontend Usage
+
+On client side:
+
+import { io } from "socket.io-client";
+
+const socket = io("http://localhost:8000", { withCredentials: true });
+
+// Authenticate with JWT
+socket.emit("authenticate", accessToken);
+
+socket.on("notification", (notif) => {
+  console.log("🔔 New notification:", notif);
+});
+
+
+

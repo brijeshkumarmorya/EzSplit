@@ -59,10 +59,11 @@ const expenseSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
+      index: true
     },
 
     // If belongs to a group, otherwise null
-    group: { type: mongoose.Schema.Types.ObjectId, ref: "Group", default: null },
+    group: { type: mongoose.Schema.Types.ObjectId, ref: "Group", default: null, index: true },
 
     // Defines how the expense is split
     splitType: {
@@ -126,5 +127,7 @@ expenseSchema.pre("save", function (next) {
   next();
 });
 
-export default mongoose.models.Expense ||
-  mongoose.model("Expense", expenseSchema);
+expenseSchema.index({ paidBy: 1, createdAt: -1 })
+
+const Expense = mongoose.models.Expense || mongoose.model("Expense", expenseSchema);
+export default Expense;
